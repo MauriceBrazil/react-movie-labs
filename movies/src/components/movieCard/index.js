@@ -8,6 +8,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import PlaylistIcon from "@mui/icons-material/PlaylistAdd";
 import CalendarIcon from "@mui/icons-material/CalendarTodayTwoTone";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import IconButton from "@mui/material/IconButton";
@@ -17,7 +18,7 @@ import { Link } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
 
 export default function MovieCard({ movie, action }) { 
-  const { favorites, addToFavorites } = useContext(MoviesContext);
+  const { favorites, addToFavorites, playlist, addToPlaylist } = useContext(MoviesContext);
 
   if (favorites.find((id) => id === movie.id)) {
     movie.favorite = true;
@@ -30,6 +31,17 @@ export default function MovieCard({ movie, action }) {
     addToFavorites(movie);
   };
 
+  if (playlist.find((id) => id === movie.id)) {
+    movie.playlist = true;
+  } else {
+    movie.playlist = false
+  }
+
+  const handleAddToPlaylist = (e) => {
+    e.preventDefault();
+    addToPlaylist(movie);
+  };
+
   return (
     <Card sx={{ maxWidth: 345 }}>
        <CardHeader
@@ -38,8 +50,14 @@ export default function MovieCard({ movie, action }) {
             <Avatar sx={{ backgroundColor: 'red' }}>
               <FavoriteIcon />
             </Avatar>
+          ) :
+          movie.playlist ? (
+            <Avatar sx={{ backgroundColor: 'green' }}>
+              <PlaylistIcon />
+            </Avatar>
           ) : null
         }
+      
         title={
           <Typography variant="h5" component="p">
             {movie.title}{" "}
